@@ -1,4 +1,6 @@
 import express from 'express';
+import morgan from 'morgan';
+import { unknownEndpoint } from './middlewares.js';
 
 const movies = [
   {
@@ -27,7 +29,7 @@ let users = [
 ];
 
 const app = express();
-app.use(express.json());
+app.use(express.json(), morgan('tiny'));
 
 app.get('/users/:id', (req, res) => {
   const {
@@ -67,6 +69,8 @@ app.post('/users', (req, res) => {
   users.push(user);
   res.json(user);
 });
+
+app.use(unknownEndpoint);
 
 const PORT = 3001;
 app.listen(PORT, () => console.log(`Server started on ${PORT}`));
