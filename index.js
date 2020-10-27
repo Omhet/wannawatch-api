@@ -33,7 +33,11 @@ app.get("/users/:id", (req, res) => {
     params: { id },
   } = req;
   const user = users.find((user) => user.id === id);
-  res.json(user);
+  if (user !== undefined) {
+    res.json(user);
+  } else {
+      res.status(404).end();
+  }
 });
 
 const PORT = 3001;
