@@ -13,7 +13,7 @@ const movies = [
   },
 ];
 
-const users = [
+let users = [
   {
     id: "1",
     name: "Joe",
@@ -32,12 +32,22 @@ app.get("/users/:id", (req, res) => {
   const {
     params: { id },
   } = req;
-  const user = users.find((user) => user.id === id);
+    const user = users.find((user) => user.id === id);
+    
   if (user !== undefined) {
     res.json(user);
   } else {
-      res.status(404).end();
+    res.status(404).end();
   }
+});
+
+app.delete("/users/:id", (req, res) => {
+  const {
+    params: { id },
+  } = req;
+    users = users.filter((user) => user.id !== id);
+    
+    res.status(204).end();
 });
 
 const PORT = 3001;
