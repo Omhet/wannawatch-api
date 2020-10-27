@@ -1,4 +1,4 @@
-import http from "http";
+import express from "express";
 
 const movies = [
     {
@@ -13,10 +13,15 @@ const movies = [
     },
 ]
 
-const app = http.createServer((req, res) => {
-    res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify(movies));
+const app = express();
+
+app.get('/', (req, res) => {
+    res.send('<h1>Hello</h1>')
 });
+
+app.get('/movies', (req, res) => {
+    res.json(movies)
+})
 
 const PORT = 3001;
 app.listen(PORT, () => console.log(`Server started on ${PORT}`));
