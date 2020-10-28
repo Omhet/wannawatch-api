@@ -1,5 +1,6 @@
 import express from 'express';
 import morgan from 'morgan';
+import cors from 'cors';
 import { unknownEndpoint } from './middlewares.js';
 
 const movies = [
@@ -29,7 +30,7 @@ let users = [
 ];
 
 const app = express();
-app.use(express.json(), morgan('tiny'));
+app.use(cors(), express.json(), morgan('tiny'));
 
 app.get('/users/:id', (req, res) => {
   const {
