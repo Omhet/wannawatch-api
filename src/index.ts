@@ -1,8 +1,7 @@
 import 'reflect-metadata';
 import express from 'express';
-import morgan from 'morgan';
 import cors from 'cors';
-import { unknownEndpoint } from './middlewares.js';
+import { requestLogger, unknownEndpoint } from './middlewares';
 
 const movies = [
   {
@@ -31,7 +30,7 @@ let users = [
 ];
 
 const app = express();
-app.use(cors(), express.json(), morgan('tiny'));
+app.use(cors(), express.json(), requestLogger);
 
 app.get('/users/:id', (req, res) => {
   const {
@@ -56,7 +55,7 @@ app.delete('/users/:id', (req, res) => {
 });
 
 app.post('/users', (req, res) => {
-  const maxId = users.length > 0 ? Math.max(...users.map(({ id }) => id)) : 0;
+  const maxId = users.length > 0 ? Math.max(...users.map(({ id }) => +id)) : 0;
   const {
     body: { name },
   } = req;

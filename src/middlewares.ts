@@ -1,4 +1,6 @@
-export const requestLogger = (req, res, next) => {
+import { RequestHandler } from "express";
+
+export const requestLogger: RequestHandler = (req, _res, next) => {
   console.log('\n');
   console.log('Request:');
   console.log('---');
@@ -9,7 +11,7 @@ export const requestLogger = (req, res, next) => {
   next();
 };
 
-export const unknownEndpoint = (req, res, next) => {
+export const unknownEndpoint: RequestHandler = (_req, res, next) => {
     res.status(404).json({ error: 'unknown endpoint' });
     next();
 };
