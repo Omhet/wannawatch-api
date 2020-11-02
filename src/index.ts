@@ -2,76 +2,41 @@ import 'reflect-metadata';
 import express from 'express';
 import cors from 'cors';
 import { requestLogger, unknownEndpoint } from './middlewares';
+import { createConnection } from 'typeorm';
+import { User } from './db/entities/User';
+import { ormConfig } from './db/orm-config';
 
-const movies = [
-  {
-    id: '1',
-    name: 'Avatar',
-    year: 2008,
-  },
-  {
-    id: '2',
-    name: 'Sherlock',
-    year: 2005,
-  },
-];
+createConnection(ormConfig).then((connection) => {
+  const app = express();
+  app.use(cors(), express.json(), requestLogger);
 
-let users = [
-  {
-    id: '1',
-    name: 'Joe',
-    movies: movies.slice(0, 1),
-  },
-  {
-    id: '2',
-    name: 'Bob',
-    movies,
-  },
-];
+  const userRepo = connection.getRepository(User);
 
-const app = express();
-app.use(cors(), express.json(), requestLogger);
+  app.get('/users', async (_req, res) => {
+    const users = await userRepo.find();
+    res.json(users);
+  });
 
-app.get('/users/:id', (req, res) => {
-  const {
-    params: { id },
-  } = req;
-  const user = users.find((user) => user.id === id);
+  app.get('/users/:id', (req, res) => {
+    // here we will have logic to return user by id
+  });
 
-  if (user !== undefined) {
-    res.json(user);
-  } else {
-    res.status(404).end();
-  }
+  app.post('/users', async (req, res) => {
+    const user = await userRepo.create(req.body);
+    const result = await userRepo.save(user);
+    res.send(result);
+  });
+
+  app.put('/users/:id', (req, res) => {
+    // here we will have logic to update a user by a given user id
+  });
+
+  app.delete('/users/:id', (req, res) => {
+    // here we will have logic to delete a user by a given user id
+  });
+
+  app.use(unknownEndpoint);
+
+  const PORT = process.env.PORT || 3001;
+  app.listen(PORT, () => console.log(`Server started on ${PORT}`));
 });
-
-app.delete('/users/:id', (req, res) => {
-  const {
-    params: { id },
-  } = req;
-  users = users.filter((user) => user.id !== id);
-
-  res.status(204).end();
-});
-
-app.post('/users', (req, res) => {
-  const maxId = users.length > 0 ? Math.max(...users.map(({ id }) => +id)) : 0;
-  const {
-    body: { name },
-  } = req;
-  if (!name) {
-    return res.status(400).json({ error: 'name missing' });
-  }
-  const user = {
-    id: String(maxId + 1),
-    name,
-    movies: [],
-  };
-  users.push(user);
-  res.json(user);
-});
-
-app.use(unknownEndpoint);
-
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`Server started on ${PORT}`));
