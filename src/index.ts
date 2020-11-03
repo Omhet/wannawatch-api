@@ -4,11 +4,10 @@ import express from 'express';
 import cors from 'cors';
 import { errorHandler, requestLogger, unknownEndpoint } from './utils/middlewares';
 import { createConnection } from 'typeorm';
-import { ormConfig } from './db/orm-config';
+import { ormConfig } from './orm-config';
 import logger from './utils/logger';
 import config from './utils/config';
 import { userRouter } from './controllers/users';
-
 
 createConnection(ormConfig)
   .then(() => {

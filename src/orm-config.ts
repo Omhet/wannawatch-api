@@ -1,6 +1,6 @@
 import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
-import config from "../utils/config";
-import { User } from "./entities/User";
+import config from "./utils/config";
+import { User } from "./models/User";
 
 export const ormConfig: PostgresConnectionOptions = {
   type: 'postgres',
