@@ -1,5 +1,5 @@
 import { ErrorRequestHandler, RequestHandler } from "express";
-import logger from "./utils/logger";
+import logger from "./logger";
 
 export const requestLogger: RequestHandler = (req, _res, next) => {
   logger.info('\n');
