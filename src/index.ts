@@ -1,26 +1,27 @@
 import 'reflect-metadata';
 import 'express-async-errors';
-import express from 'express';
-import cors from 'cors';
-import { errorHandler, requestLogger, unknownEndpoint } from './utils/middlewares';
+import http from 'http';
 import { createConnection } from 'typeorm';
 import { ormConfig } from './orm-config';
 import logger from './utils/logger';
 import config from './utils/config';
-import { userRouter } from './controllers/users';
+import app from './app';
 
-createConnection(ormConfig)
-  .then(() => {
-    const app = express();
-    app.use(cors(), express.json(), requestLogger);
+(async () => {
+  try {
+    await createConnection(ormConfig);
+    logger.info('Connected to DB');
+  } catch (error) {
+    logger.error('Failed to connect to DB', error.message);
+    return;
+  }
 
-    app.use('/users', userRouter);
-
-    app.use(unknownEndpoint);
-    app.use(errorHandler);
-
-    app.listen(config.PORT, () => logger.info(`Server started on ${config.PORT}`));
-  })
-  .catch((error) => {
-    logger.error(error);
-  });
+  try {
+    const server = http.createServer(app);
+    server.listen(config.PORT, () =>
+      logger.info(`Server started on ${config.PORT}`)
+    );
+  } catch (error) {
+    logger.error('Failed to start server', error.message);
+  }
+})();
