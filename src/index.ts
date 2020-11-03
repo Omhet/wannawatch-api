@@ -10,6 +10,7 @@ import { errorHandler, requestLogger, unknownEndpoint } from './middlewares';
 import { createConnection } from 'typeorm';
 import { User } from './db/entities/User';
 import { ormConfig } from './db/orm-config';
+import logger from './utils/logger';
 
 
 createConnection(ormConfig)
@@ -46,8 +47,8 @@ createConnection(ormConfig)
     app.use(errorHandler);
 
     const PORT = process.env.PORT || 3001;
-    app.listen(PORT, () => console.log(`Server started on ${PORT}`));
+    app.listen(PORT, () => logger.info(`Server started on ${PORT}`));
   })
   .catch((error) => {
-    console.error(error);
+    logger.error(error);
   });

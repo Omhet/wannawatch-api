@@ -1,13 +1,14 @@
 import { ErrorRequestHandler, RequestHandler } from "express";
+import logger from "./utils/logger";
 
 export const requestLogger: RequestHandler = (req, _res, next) => {
-  console.log('\n');
-  console.log('Request:');
-  console.log('---');
-  console.log('Method: ', req.method);
-  console.log('Path: ', req.path);
-  console.log('Body: ', req.body);
-  console.log('---');
+  logger.info('\n');
+  logger.info('Request:');
+  logger.info('---');
+  logger.info('Method: ', req.method);
+  logger.info('Path: ', req.path);
+  logger.info('Body: ', req.body);
+  logger.info('---');
   next();
 };
 
@@ -17,7 +18,7 @@ export const unknownEndpoint: RequestHandler = (_req, res, next) => {
 };
 
 export const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
-  console.error(error.message);
+  logger.error(error.message);
 
   // Not null constrain violation
   if (error.code === '23502') {
