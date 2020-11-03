@@ -1,11 +1,16 @@
 import 'reflect-metadata';
 import 'express-async-errors';
+
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
 import cors from 'cors';
 import { errorHandler, requestLogger, unknownEndpoint } from './middlewares';
 import { createConnection } from 'typeorm';
 import { User } from './db/entities/User';
 import { ormConfig } from './db/orm-config';
+
 
 createConnection(ormConfig)
   .then((connection) => {
