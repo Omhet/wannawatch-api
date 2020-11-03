@@ -18,6 +18,11 @@ export const unknownEndpoint: RequestHandler = (_req, res, next) => {
 
 export const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
   console.error(error.message);
-  
+
+  // Not null constrain violation
+  if (error.code === '23502') {
+    return res.status(400).end();
+  }
+
   return res.status(500).end();
 }
