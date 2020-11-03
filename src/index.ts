@@ -1,9 +1,5 @@
 import 'reflect-metadata';
 import 'express-async-errors';
-
-import dotenv from 'dotenv';
-dotenv.config();
-
 import express from 'express';
 import cors from 'cors';
 import { errorHandler, requestLogger, unknownEndpoint } from './middlewares';
@@ -11,6 +7,7 @@ import { createConnection } from 'typeorm';
 import { User } from './db/entities/User';
 import { ormConfig } from './db/orm-config';
 import logger from './utils/logger';
+import config from './utils/config';
 
 
 createConnection(ormConfig)
@@ -46,8 +43,7 @@ createConnection(ormConfig)
     app.use(unknownEndpoint);
     app.use(errorHandler);
 
-    const PORT = process.env.PORT || 3001;
-    app.listen(PORT, () => logger.info(`Server started on ${PORT}`));
+    app.listen(config.PORT, () => logger.info(`Server started on ${config.PORT}`));
   })
   .catch((error) => {
     logger.error(error);

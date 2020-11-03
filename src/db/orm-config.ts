@@ -1,12 +1,13 @@
 import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
+import config from "../utils/config";
 import { User } from "./entities/User";
 
 export const ormConfig: PostgresConnectionOptions = {
   type: 'postgres',
-  host: process.env.DB_HOST,
+  host: config.DB_HOST,
   port: 5432,
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
+  username: config.DB_USER,
+  password: config.DB_PASSWORD,
   database: 'wannawatch',
   synchronize: true,
   logging: false,
