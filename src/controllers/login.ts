@@ -19,5 +19,5 @@ loginRouter.post('/', async (req, res) => {
 
     req.session.userId = user?.id;
 
-    res.status(200).end();
+    res.status(204).end();
 });

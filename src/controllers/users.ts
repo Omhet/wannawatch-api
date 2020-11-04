@@ -31,13 +31,15 @@ userRouter.post('/', async ({ body }, res) => {
   const result = await userRepo.save(user);
   // @ts-ignore
   delete result.password;
-  res.send(result);
+  res.json(result);
 });
 
 userRouter.put('/:id', loginRequired, (req, res) => {
   // here we will have logic to update a user by a given user id
 });
 
-userRouter.delete('/:id', loginRequired, (req, res) => {
-  // here we will have logic to delete a user by a given user id
+userRouter.delete('/', loginRequired, async (req, res) => {
+    const userRepo = await getRepository(User);
+    await userRepo.delete(req.user?.id);
+    res.status(204).end();
 });
