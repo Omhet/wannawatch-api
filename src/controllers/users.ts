@@ -5,37 +5,45 @@ import { getRepository } from 'typeorm';
 import { User } from '../models/User';
 import { loginRequired } from '../utils/middlewares';
 
+const saltRounds = 10;
+
 export const userRouter = Router();
 
 userRouter.get('/', async (_req, res) => {
-  const userRepo = getRepository(User);
-  const users = await userRepo.find();
-  res.json(users);
+    const userRepo = getRepository(User);
+    const users = await userRepo.find();
+    res.json(users);
 });
 
 userRouter.post('/', async ({ body }, res) => {
-  const userRepo = getRepository(User);
+    const userRepo = getRepository(User);
 
-  const saltRounds = 10;
-  const hashedPassword = await hash(body.password, saltRounds);
-  const user = await userRepo.create({
-    ...body,
-    password: hashedPassword,
-  });
+    const hashedPassword = await hash(body.password, saltRounds);
+    const user = await userRepo.create({
+        ...body,
+        password: hashedPassword,
+    });
 
-  const errors = await validate(user);
-  if (errors.length > 0) {
-    throw new Error('User validation failed');
-  }
+    const errors = await validate(user);
+    if (errors.length > 0) {
+        throw new Error('User validation failed');
+    }
 
-  const result = await userRepo.save(user);
-  // @ts-ignore
-  delete result.password;
-  res.json(result);
+    const result = await userRepo.save(user);
+    // @ts-ignore
+    delete result.password;
+    res.json(result);
 });
 
-userRouter.put('/:id', loginRequired, (req, res) => {
-  // here we will have logic to update a user by a given user id
+userRouter.put('/', loginRequired, async ({ body, user }, res) => {
+    const userRepo = await getRepository(User);
+
+    if (body.password) {
+        body.password = await hash(body.password, saltRounds);
+    }
+
+    await userRepo.update(user?.id, body);
+    res.status(204).end();
 });
 
 userRouter.delete('/', loginRequired, async (req, res) => {
