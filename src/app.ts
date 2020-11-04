@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
 import sessions from 'client-sessions';
 import {
     errorHandler,
@@ -12,7 +13,7 @@ import config from './utils/config';
 import { loginRouter } from './controllers/login';
 
 const app = express();
-app.use(cors(), express.json(), requestLogger);
+app.use(helmet(), cors(), express.json(), requestLogger);
 
 app.use(
     sessions({
