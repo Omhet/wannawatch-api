@@ -1,3 +1,5 @@
+import { hash } from 'bcrypt';
+import { validate } from 'class-validator';
 import { Router } from 'express';
 import { getRepository } from 'typeorm';
 import { User } from '../models/User';
@@ -14,10 +16,24 @@ userRouter.get('/:id', (req, res) => {
   // here we will have logic to return user by id
 });
 
-userRouter.post('', async (req, res) => {
+userRouter.post('', async ({ body }, res) => {
   const userRepo = getRepository(User);
-  const user = await userRepo.create(req.body);
+
+  const saltRounds = 10;
+  const hashedPassword = await hash(body.password, saltRounds);
+  const user = await userRepo.create({
+    ...body,
+    password: hashedPassword,
+  });
+
+  const errors = await validate(user);
+  if (errors.length > 0) {
+    throw new Error('User validation failed');
+  }
+
   const result = await userRepo.save(user);
+  // @ts-ignore
+  delete result.password;
   res.send(result);
 });
 

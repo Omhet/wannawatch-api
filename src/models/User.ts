@@ -1,13 +1,15 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Length } from 'class-validator';
 
 @Entity()
 export class User {
-    @PrimaryGeneratedColumn()
-    id!: number;
+  @PrimaryGeneratedColumn('uuid')
+  id!: number;
 
-    @Column()
-    login!: string;
-    
-    @Column()
-    password!: string;
+  @Column({ unique: true })
+  @Length(3, 20)
+  username!: string;
+
+  @Column({ select: false })
+  password!: string;
 }
