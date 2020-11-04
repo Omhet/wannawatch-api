@@ -5,6 +5,7 @@ import {
     errorHandler,
     requestLogger,
     unknownEndpoint,
+    userAuth,
 } from './utils/middlewares';
 import { userRouter } from './controllers/users';
 import config from './utils/config';
@@ -21,8 +22,10 @@ app.use(
     })
 );
 
-app.use('/users', userRouter);
 app.use('/login', loginRouter);
+app.use(userAuth);
+
+app.use('/users', userRouter);
 
 app.use(unknownEndpoint);
 app.use(errorHandler);

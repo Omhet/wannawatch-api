@@ -1,4 +1,6 @@
 import { ErrorRequestHandler, RequestHandler } from "express";
+import { getRepository } from "typeorm";
+import { User } from "../models/User";
 import logger from "./logger";
 
 export const requestLogger: RequestHandler = (req, _res, next) => {
@@ -26,4 +28,31 @@ export const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
   }
 
   return res.status(500).end();
+}
+
+export const userAuth: RequestHandler = async (req, res, next) => {
+  const { session } = req;
+  if (!(session && session.userId)) {
+    return next();
+  }
+
+  const userRepo = getRepository(User);
+  const user = await userRepo.findOne({ id: session.userId });
+  if (!user) {
+    return next();
+  }
+
+  user.password = '';
+  req.user = user;
+  res.locals.user = user;
+
+  next();
+}
+
+export const loginRequired: RequestHandler = async (req, res, next) => {
+  if (!req.user) {
+    return res.status(401).json({ error: 'Auth required ' });
+  }
+
+  next();
 }

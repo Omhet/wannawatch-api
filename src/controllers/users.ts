@@ -3,6 +3,7 @@ import { validate } from 'class-validator';
 import { Router } from 'express';
 import { getRepository } from 'typeorm';
 import { User } from '../models/User';
+import { loginRequired } from '../utils/middlewares';
 
 export const userRouter = Router();
 
@@ -12,11 +13,7 @@ userRouter.get('/', async (_req, res) => {
   res.json(users);
 });
 
-userRouter.get('/:id', (req, res) => {
-  // here we will have logic to return user by id
-});
-
-userRouter.post('', async ({ body }, res) => {
+userRouter.post('/', async ({ body }, res) => {
   const userRepo = getRepository(User);
 
   const saltRounds = 10;
@@ -37,10 +34,10 @@ userRouter.post('', async ({ body }, res) => {
   res.send(result);
 });
 
-userRouter.put('/:id', (req, res) => {
+userRouter.put('/:id', loginRequired, (req, res) => {
   // here we will have logic to update a user by a given user id
 });
 
-userRouter.delete('/:id', (req, res) => {
+userRouter.delete('/:id', loginRequired, (req, res) => {
   // here we will have logic to delete a user by a given user id
 });

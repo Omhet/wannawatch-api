@@ -17,7 +17,6 @@ loginRouter.post('/', async (req, res) => {
         return res.status(401).json({ error: 'Credentials are not correct ' });
     }
 
-    // @ts-ignore
     req.session.userId = user?.id;
 
     res.status(200).end();
