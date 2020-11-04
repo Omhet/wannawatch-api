@@ -10,6 +10,6 @@ export class User {
   @Length(3, 20)
   username!: string;
 
-  @Column({ select: false })
+  @Column()
   password!: string;
 }
