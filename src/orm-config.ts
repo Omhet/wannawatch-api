@@ -1,6 +1,7 @@
 import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
 import config from "./utils/config";
 import { User } from "./models/User";
+import { Movie } from "./models/Movie";
 
 export const ormConfig: PostgresConnectionOptions = {
   type: 'postgres',
@@ -11,5 +12,5 @@ export const ormConfig: PostgresConnectionOptions = {
   database: 'wannawatch',
   synchronize: true,
   logging: false,
-  entities: [User],
+  entities: [User, Movie],
 };

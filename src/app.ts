@@ -8,7 +8,7 @@ import {
     unknownEndpoint,
     userAuth,
 } from './utils/middlewares';
-import { userRouter } from './controllers/users';
+import { currentUserRouter } from './controllers/currentUser';
 import config from './utils/config';
 import { authRouter } from './controllers/auth';
 
@@ -26,7 +26,7 @@ app.use(
 app.use('/auth', authRouter);
 app.use(userAuth);
 
-app.use('/users', userRouter);
+app.use('/me', currentUserRouter);
 
 app.use(unknownEndpoint);
 app.use(errorHandler);
