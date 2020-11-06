@@ -35,7 +35,7 @@ userRouter.post('/', async ({ body }, res) => {
     res.json(result);
 });
 
-userRouter.put('/', loginRequired, async ({ body, user }, res) => {
+userRouter.put('/me', loginRequired, async ({ body, user }, res) => {
     const userRepo = await getRepository(User);
 
     if (body.password) {
@@ -46,7 +46,7 @@ userRouter.put('/', loginRequired, async ({ body, user }, res) => {
     res.status(204).end();
 });
 
-userRouter.delete('/', loginRequired, async (req, res) => {
+userRouter.delete('/me', loginRequired, async (req, res) => {
     const userRepo = await getRepository(User);
     await userRepo.delete(req.user?.id);
     res.status(204).end();
