@@ -3,9 +3,9 @@ import { Router } from 'express';
 import { getRepository } from 'typeorm';
 import { User } from '../models/User';
 
-export const loginRouter = Router();
+export const authRouter = Router();
 
-loginRouter.post('/', async (req, res) => {
+authRouter.post('/login', async (req, res) => {
     const { body: { username, password } } = req;
 
     const userRepo = getRepository(User);
@@ -18,6 +18,12 @@ loginRouter.post('/', async (req, res) => {
     }
 
     req.session.userId = user?.id;
+
+    res.status(204).end();
+});
+
+authRouter.post('/logout', async (req, res) => {
+    req.session.reset();
 
     res.status(204).end();
 });

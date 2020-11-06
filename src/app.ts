@@ -10,7 +10,7 @@ import {
 } from './utils/middlewares';
 import { userRouter } from './controllers/users';
 import config from './utils/config';
-import { loginRouter } from './controllers/login';
+import { authRouter } from './controllers/auth';
 
 const app = express();
 app.use(helmet(), cors(), express.json(), requestLogger);
@@ -23,7 +23,7 @@ app.use(
     })
 );
 
-app.use('/login', loginRouter);
+app.use('/auth', authRouter);
 app.use(userAuth);
 
 app.use('/users', userRouter);
