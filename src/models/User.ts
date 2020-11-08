@@ -20,7 +20,7 @@ export class User {
     @Column()
     password!: string;
 
-    @ManyToMany(() => Movie)
+    @ManyToMany(() => Movie, { onDelete: 'NO ACTION' })
     @JoinTable()
     movies!: Movie[];
 }

@@ -4,7 +4,7 @@ import { User } from './User';
 @Entity()
 export class Movie {
     @PrimaryColumn()
-    id!: number;
+    id!: string;
 
     @Column()
     title!: string;

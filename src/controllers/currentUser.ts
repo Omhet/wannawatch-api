@@ -57,3 +57,21 @@ currentUserRouter.post('/movies', loginRequired, async (req, res) => {
 
     res.status(204).end();
 });
+
+currentUserRouter.delete('/movies/:id', loginRequired, async (req, res) => {
+    const { id } = req.params;
+
+    const userRepo = await getRepository(User);
+    req.user.movies = req.user.movies.filter((movie: Movie) => movie.id !== id);
+    await userRepo.save(req.user);
+
+    try {
+        const movieRepo = await getRepository(Movie);
+        await movieRepo.delete({ id })
+    } catch {
+        console.log('Other users stil have this movie with id ', id)
+    }
+
+    res.status(204).end();
+
+});
