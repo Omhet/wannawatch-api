@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { User } from './User';
 
 @Entity()
 export class Movie {
@@ -13,4 +14,6 @@ export class Movie {
 
     @Column('decimal')
     rate!: number;
+
+    users!: User[];
 }
