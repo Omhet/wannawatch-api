@@ -33,6 +33,20 @@ currentUserRouter.put('/', loginRequired, async ({ body, user }, res) => {
 
 currentUserRouter.delete('/', loginRequired, async (req, res) => {
     const userRepo = await getRepository(User);
+    const movieRepo = await getRepository(Movie);
+
+    const movies = req.user.movies;
+
+    req.user.movies = [];
+    await userRepo.save(req.user);
+
+    const deletePromisies = movies.map((movie: Movie) => movieRepo.delete(movie.id))
+    try {
+        await Promise.all(deletePromisies);
+    } catch {
+        console.log('Other users stil have this movies',)
+    }
+
     await userRepo.delete(req.user?.id);
     res.status(204).end();
 });
