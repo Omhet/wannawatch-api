@@ -8,12 +8,12 @@ import { loginRequired } from '../utils/middlewares';
 
 export const currentUserRouter = Router();
 
+// TODO: Restrict these routes to only DEV env
 currentUserRouter.get('/users', async (_req, res) => {
     const userRepo = getRepository(User);
     const users = await userRepo.find();
     res.json(users);
 });
-
 currentUserRouter.get('/allMovies', async (_req, res) => {
     const movieRepo = await getRepository(Movie);
     const movies = await movieRepo.find();
@@ -37,9 +37,11 @@ currentUserRouter.delete('/', loginRequired, async (req, res) => {
 
     const movies = req.user.movies;
 
+    // Delete current user's watchlist
     req.user.movies = [];
     await userRepo.save(req.user);
 
+    // Try to delete from DB every movie current user has if others don't have it
     const deletePromisies = movies.map((movie: Movie) => movieRepo.delete(movie.id))
     try {
         await Promise.all(deletePromisies);
@@ -47,6 +49,7 @@ currentUserRouter.delete('/', loginRequired, async (req, res) => {
         console.log('Other users stil have this movies',)
     }
 
+    // Delete current user
     await userRepo.delete(req.user?.id);
     res.status(204).end();
 });
