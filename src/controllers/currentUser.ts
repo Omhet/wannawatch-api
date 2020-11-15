@@ -20,6 +20,12 @@ currentUserRouter.get('/allMovies', async (_req, res) => {
     res.json(movies);
 });
 
+currentUserRouter.get('/', loginRequired, async (req, res) => {
+    delete req.user.password;
+    delete req.user.id;
+    res.json(req.user);
+})
+
 currentUserRouter.put('/', loginRequired, async ({ body, user }, res) => {
     const userRepo = await getRepository(User);
 

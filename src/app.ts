@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import sessions from 'client-sessions';
+import sessions from 'express-session';
 import {
     errorHandler,
     requestLogger,
@@ -13,13 +13,20 @@ import config from './utils/config';
 import { authRouter } from './controllers/auth';
 
 const app = express();
-app.use(helmet(), cors(), express.json(), requestLogger);
+app.use(helmet(), cors({ origin: true, credentials: true }), express.json(), requestLogger);
 
 app.use(
     sessions({
-        cookieName: 'session',
+        name: 'session',
         secret: config.COOKIE_SECRET!,
-        duration: 30 * 60 * 1000,
+        resave: false,
+        saveUninitialized: true,
+        cookie: {
+            sameSite: 'none',
+            secure: true,
+            httpOnly: true,
+            maxAge: 30 * 60 * 1000
+        }
     })
 );
 
