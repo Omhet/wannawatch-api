@@ -45,7 +45,7 @@ authRouter.post('/login', async (req, res) => {
 });
 
 authRouter.post('/logout', async (req, res) => {
-    req.session.reset();
+    req.session.destroy();
 
     res.status(204).end();
 });
