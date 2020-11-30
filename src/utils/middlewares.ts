@@ -21,6 +21,13 @@ export const unknownEndpoint: RequestHandler = (_req, res, next) => {
 
 export const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
     logger.error(error.message);
+    logger.error(error);
+
+    if (/username.+already exists/.test(error.detail)){
+        return res.status(400).json({
+            error: 'user_exists'
+        });
+    }
 
     // Not null constrain violation
     if (error.code === '23502') {
