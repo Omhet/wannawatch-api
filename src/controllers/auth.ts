@@ -2,7 +2,7 @@ import { compareSync, hash } from 'bcrypt';
 import { validate } from 'class-validator';
 import { Router } from 'express';
 import { getRepository } from 'typeorm';
-import { hashSaltRounds } from '../constants';
+import { hashSaltRounds, successfulResponse } from '../constants';
 import { User } from '../models/User';
 
 export const authRouter = Router();
@@ -36,16 +36,16 @@ authRouter.post('/login', async (req, res) => {
     const areCredsCorrect =
         user !== undefined && compareSync(password, user.password);
     if (!areCredsCorrect) {
-        return res.status(401).json({ error: 'Credentials are not correct ' });
+        return res.status(401).json({ error: 'invalid_creds' });
     }
 
     req.session.userId = user?.id;
 
-    res.status(204).end();
+    res.status(200).json(successfulResponse);
 });
 
 authRouter.post('/logout', async (req, res) => {
     req.session.destroy();
 
-    res.status(204).end();
+    res.status(200).json(successfulResponse);
 });

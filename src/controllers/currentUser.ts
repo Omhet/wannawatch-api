@@ -1,7 +1,7 @@
 import { hash } from 'bcrypt';
 import { Router } from 'express';
 import { getRepository } from 'typeorm';
-import { hashSaltRounds } from '../constants';
+import { hashSaltRounds, successfulResponse } from '../constants';
 import { Movie } from '../models/Movie';
 import { User } from '../models/User';
 import { loginRequired } from '../utils/middlewares';
@@ -34,7 +34,7 @@ currentUserRouter.put('/', loginRequired, async ({ body, user }, res) => {
     }
 
     await userRepo.update(user?.id, body);
-    res.status(204).end();
+    res.status(200).json(successfulResponse);
 });
 
 currentUserRouter.delete('/', loginRequired, async (req, res) => {
@@ -57,7 +57,7 @@ currentUserRouter.delete('/', loginRequired, async (req, res) => {
 
     // Delete current user
     await userRepo.delete(req.user?.id);
-    res.status(204).end();
+    res.status(200).json(successfulResponse);
 });
 
 currentUserRouter.get('/movies', loginRequired, async (req, res) => {
@@ -78,7 +78,7 @@ currentUserRouter.post('/movies', loginRequired, async (req, res) => {
     req.user.movies.push(movie)
     await userRepo.save(req.user);
 
-    res.status(204).end();
+    res.status(200).json(successfulResponse);
 });
 
 currentUserRouter.delete('/movies/:id', loginRequired, async (req, res) => {
@@ -95,6 +95,6 @@ currentUserRouter.delete('/movies/:id', loginRequired, async (req, res) => {
         console.log('Other users stil have this movie with id ', id)
     }
 
-    res.status(204).end();
+    res.status(200).json(successfulResponse);
 
 });
