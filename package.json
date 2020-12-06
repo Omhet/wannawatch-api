@@ -4,12 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node --loader @k-foss/ts-esnode --experimental-specifier-resolution=node ./src/index.ts",
+    "start": "tsc && cp -R ./src/certs ./dist && node ./dist",
     "dev": "nodemon --watch 'src/**' --ext 'ts,json' --ignore 'src/**/*.spec.ts' --exec 'node --loader @k-foss/ts-esnode --experimental-specifier-resolution=node ./src/index.ts'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "type": "module",
   "license": "ISC",
   "dependencies": {
     "@k-foss/ts-esnode": "^1.7.0",

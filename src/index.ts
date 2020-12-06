@@ -8,10 +8,10 @@ import logger from './utils/logger';
 import config from './utils/config';
 import app from './app';
 
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
+// import { dirname } from 'path';
+// import { fileURLToPath } from 'url';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+// const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const key = fs.readFileSync(__dirname + '/certs/localhost-key.pem', 'utf-8');
 const cert = fs.readFileSync(__dirname + '/certs/localhost.pem', 'utf-8');
