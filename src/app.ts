@@ -21,6 +21,7 @@ app.use(
         secret: config.COOKIE_SECRET!,
         resave: false,
         saveUninitialized: true,
+        proxy: true,
         cookie: {
             sameSite: 'none',
             secure: true,
