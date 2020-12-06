@@ -33,7 +33,7 @@ export const ormConfig: PostgresConnectionOptions = {
     synchronize: true,
     logging: false,
     entities: [User, Movie],
-    extra: {
-        ssl: true,
-    },
+    // extra: {
+    //     ssl: true,
+    // },
 };
