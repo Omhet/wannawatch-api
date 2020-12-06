@@ -5,8 +5,9 @@ import { Movie } from "./models/Movie";
 
 export const ormConfig: PostgresConnectionOptions = {
   type: 'postgres',
-  host: config.DB_HOST,
-  port: 5432,
+  url:  'postgresql-curved-34636',
+  // host: config.DB_HOST,
+  // port: 5432,
   username: config.DB_USER,
   password: config.DB_PASSWORD,
   database: 'wannawatch',
