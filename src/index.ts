@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import 'express-async-errors';
-import https from 'https';
-import fs from 'fs';
+import http from 'http';
+// import fs from 'fs';
 import { createConnection } from 'typeorm';
 import { ormConfig } from './orm-config';
 import logger from './utils/logger';
@@ -13,8 +13,8 @@ import app from './app';
 
 // const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const key = fs.readFileSync(__dirname + '/certs/localhost-key.pem', 'utf-8');
-const cert = fs.readFileSync(__dirname + '/certs/localhost.pem', 'utf-8');
+// const key = fs.readFileSync(__dirname + '/certs/localhost-key.pem', 'utf-8');
+// const cert = fs.readFileSync(__dirname + '/certs/localhost.pem', 'utf-8');
 
 (async () => {
     try {
@@ -26,7 +26,7 @@ const cert = fs.readFileSync(__dirname + '/certs/localhost.pem', 'utf-8');
     }
 
     try {
-        const server = https.createServer({ key, cert }, app);
+        const server = http.createServer(app);
         server.listen(config.PORT, () =>
             logger.info(`Server started on ${config.PORT}`)
         );
