@@ -13,7 +13,7 @@ import config from './utils/config';
 import { authRouter } from './controllers/auth';
 
 const app = express();
-app.use(helmet(), cors({ origin: '*', credentials: true }), express.json(), requestLogger);
+app.use(helmet(), cors({ origin: true, credentials: true }), express.json(), requestLogger);
 
 app.use(
     sessions({
